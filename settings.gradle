@@ -1,1 +1,1 @@
-include ':app', ':jokemachine'
+include ':app', ':jokemachine', ':jokeme'
