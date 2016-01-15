@@ -3,16 +3,16 @@ package com.udacity.gradle.builditbigger;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.calebwhang.Joke;
 import com.calebwhang.jokeme.JokeActivity;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements JokeCloudTask.OnPostExecute {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -45,14 +45,22 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
-        Joke joke = new Joke();
-//        Toast.makeText(this, joke.getJoke(), Toast.LENGTH_SHORT).show();
+    @Override
+    public void onPostExecute(String joke) {
+        Log.v(LOG_TAG, "The joke is " + joke);
 
         Intent intent = new Intent(this, JokeActivity.class);
-        intent.putExtra(JokeActivity.INTENT_EXTRA_JOKE, joke.getJoke());
+        intent.putExtra(JokeActivity.INTENT_EXTRA_JOKE, joke);
         startActivity(intent);
     }
 
+    public void tellJoke(View view) {
+//        Joke joke = new Joke();
+//        Toast.makeText(this, joke.getJoke(), Toast.LENGTH_SHORT).show();
+
+        JokeCloudTask jokeCloudTask = new JokeCloudTask();
+        jokeCloudTask.setOnPostExecute(this);
+        jokeCloudTask.execute();
+    }
 
 }
