@@ -55,9 +55,6 @@ public class MainActivity extends ActionBarActivity implements JokeCloudTask.OnP
     }
 
     public void tellJoke(View view) {
-//        Joke joke = new Joke();
-//        Toast.makeText(this, joke.getJoke(), Toast.LENGTH_SHORT).show();
-
         JokeCloudTask jokeCloudTask = new JokeCloudTask();
         jokeCloudTask.setOnPostExecute(this);
         jokeCloudTask.execute();
