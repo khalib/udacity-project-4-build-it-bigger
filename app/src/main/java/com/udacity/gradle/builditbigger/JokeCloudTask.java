@@ -43,8 +43,6 @@ public class JokeCloudTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        Log.v(LOG_TAG, "===== doInBackground()");
-
         // Connect to GCE.
         if (null == mMyApi) {
             MyApi.Builder builder = new MyApi.Builder(

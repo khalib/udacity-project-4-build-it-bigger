@@ -29,4 +29,5 @@ dependencies {
 //    compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.google.android.gms:play-services:7.3.0'
     compile project(path: ':jokecloud', configuration: 'android-endpoints')
+    testCompile 'junit:junit:4.12'
 }
