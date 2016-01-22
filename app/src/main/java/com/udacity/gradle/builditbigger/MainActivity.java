@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements JokeCloudTask.OnP
         startActivity(intent);
     }
 
-    public void tellJoke(View view) {
+    public void displayJoke() {
         JokeCloudTask jokeCloudTask = new JokeCloudTask();
         jokeCloudTask.setOnPostExecute(this);
         jokeCloudTask.execute();
