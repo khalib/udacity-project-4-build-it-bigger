@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Intent;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
-import com.calebwhang.jokeme.JokeActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -20,18 +19,21 @@ import com.google.android.gms.ads.InterstitialAd;
 /**
  * MainActivityFragment for the free flavor of the app.
  */
-public class MainActivityFragment extends Fragment implements JokeCloudTask.OnPostExecute {
+public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
 
     private InterstitialAd mInterstitialAd;
     private String mDeviceID;
+    private ProgressBar mProgressBar;
 
     public MainActivityFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "===== onCreate()");
+
         super.onCreate(savedInstanceState);
 
         mInterstitialAd = new InterstitialAd(getActivity());
@@ -41,7 +43,7 @@ public class MainActivityFragment extends Fragment implements JokeCloudTask.OnPo
             @Override
             public void onAdClosed() {
                 requestNewInterstitial();
-                ((MainActivity)getActivity()).displayJoke();
+                ((MainActivity) getActivity()).displayJoke();
             }
         });
 
@@ -71,11 +73,16 @@ public class MainActivityFragment extends Fragment implements JokeCloudTask.OnPo
         mAdView.loadAd(adRequest);
 
         Button buttonView = (Button) root.findViewById(R.id.joke_button);
+        mProgressBar = (ProgressBar) root.findViewById(R.id.load_progress_bar);
+
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v(LOG_TAG, "===== onClick() HERE HERE HERE FREE FREE FREE");
                 Log.v(LOG_TAG, "is ad loaded: " + Boolean.toString(mInterstitialAd.isLoaded()));
+
+                // Show loader.
+                mProgressBar.setVisibility(View.VISIBLE);
 
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
@@ -88,6 +95,14 @@ public class MainActivityFragment extends Fragment implements JokeCloudTask.OnPo
         return root;
     }
 
+    @Override
+    public void onResume() {
+        Log.v(LOG_TAG, "===== onResume()");
+        super.onResume();
+
+        mProgressBar.setVisibility(View.GONE);
+    }
+
     private void requestNewInterstitial() {
         Log.v(LOG_TAG, "===== requestNewInterstitial()");
 
@@ -96,15 +111,6 @@ public class MainActivityFragment extends Fragment implements JokeCloudTask.OnPo
                 .build();
 
         mInterstitialAd.loadAd(adRequest);
-    }
-
-    @Override
-    public void onPostExecute(String joke) {
-        Log.v(LOG_TAG, "FRAGMENT: The joke is " + joke);
-
-        Intent intent = new Intent(getActivity(), JokeActivity.class);
-        intent.putExtra(JokeActivity.INTENT_EXTRA_JOKE, joke);
-        startActivity(intent);
     }
 
 }

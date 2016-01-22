@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by caleb on 1/18/16.
+ * Connection test for the JokeCloudTask AsyncTask.
  */
 public class JokeCloudTaskTest extends InstrumentationTestCase
         implements JokeCloudTask.OnPostExecute {

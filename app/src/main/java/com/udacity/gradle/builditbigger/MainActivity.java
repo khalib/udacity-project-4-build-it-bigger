@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ProgressBar;
 
-import com.calebwhang.Joke;
 import com.calebwhang.jokeme.JokeActivity;
 
 

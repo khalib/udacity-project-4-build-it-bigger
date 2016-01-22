@@ -16,4 +16,14 @@
         android:text="@string/button_text"
         android:onClick="tellJoke" />
 
+    <ProgressBar
+        android:id="@+id/load_progress_bar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
 </RelativeLayout>
