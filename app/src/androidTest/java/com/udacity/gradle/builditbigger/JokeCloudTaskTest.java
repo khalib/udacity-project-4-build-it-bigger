@@ -33,7 +33,7 @@ public class JokeCloudTaskTest extends InstrumentationTestCase
                 mJokeCloudTask.execute();
 
                 try {
-                    mCountDownLatch.await(10, TimeUnit.SECONDS);
+                    mCountDownLatch.await(5, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -43,7 +43,8 @@ public class JokeCloudTaskTest extends InstrumentationTestCase
 
     @Override
     public void onPostExecute(String joke) {
-        assertFalse(joke.isEmpty());
+        // Check for a non-empty joke.
+        assertTrue((joke != null && joke.length() > 0));
 
         mCountDownLatch.countDown();
     }
