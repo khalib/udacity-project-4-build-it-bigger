@@ -33,7 +33,7 @@ public class JokeCloudTaskTest extends InstrumentationTestCase
                 mJokeCloudTask.execute();
 
                 try {
-                    mCountDownLatch.await(5, TimeUnit.SECONDS);
+                    mCountDownLatch.await(15, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

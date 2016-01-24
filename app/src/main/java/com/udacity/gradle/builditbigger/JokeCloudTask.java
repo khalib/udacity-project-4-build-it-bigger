@@ -63,7 +63,8 @@ public class JokeCloudTask extends AsyncTask<String, Void, String> {
             // Get the joke.
             return mMyApi.joke().execute().getData();
         } catch (IOException e) {
-            return e.getMessage();
+            Log.v(LOG_TAG, "ERROR: " + e.getMessage());
+            return null;
         }
     }
 
