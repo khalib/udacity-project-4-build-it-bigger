@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -32,8 +33,6 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "===== onCreate()");
-
         super.onCreate(savedInstanceState);
 
         mInterstitialAd = new InterstitialAd(getActivity());
@@ -55,14 +54,10 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Log.v(LOG_TAG, "===== onCreateView()");
-        Log.v(LOG_TAG, "FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE");
-
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
         mDeviceID = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.v(LOG_TAG, "Device ID: " + mDeviceID);
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
@@ -78,16 +73,21 @@ public class MainActivityFragment extends Fragment {
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v(LOG_TAG, "===== onClick() HERE HERE HERE FREE FREE FREE");
-                Log.v(LOG_TAG, "is ad loaded: " + Boolean.toString(mInterstitialAd.isLoaded()));
-
-                // Show loader.
-                mProgressBar.setVisibility(View.VISIBLE);
-
                 if (mInterstitialAd.isLoaded()) {
+                    // Show loader.
+                    mProgressBar.setVisibility(View.VISIBLE);
+
                     mInterstitialAd.show();
                 } else {
-                    ((MainActivity)getActivity()).displayJoke();
+                    // Check if there's connection.
+                    if (!Utilities.isNetworkAvailable(getActivity())) {
+                        // Alert the user that there's no connection.
+                        Toast.makeText(getActivity(), R.string.network_connection_error, Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Show loader.
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        ((MainActivity) getActivity()).displayJoke();
+                    }
                 }
             }
         });
@@ -97,15 +97,12 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onResume() {
-        Log.v(LOG_TAG, "===== onResume()");
         super.onResume();
 
         mProgressBar.setVisibility(View.GONE);
     }
 
     private void requestNewInterstitial() {
-        Log.v(LOG_TAG, "===== requestNewInterstitial()");
-
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(mDeviceID)
                 .build();

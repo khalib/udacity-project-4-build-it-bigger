@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.util.Pair;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.calebwhang.Joke;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -24,6 +25,15 @@ public class JokeCloudTask extends AsyncTask<String, Void, String> {
 
     private OnPostExecute mOnPostExecute;
     private static MyApi mMyApi;
+    private Exception mException;
+    private Context mContext;
+
+    public JokeCloudTask() {
+    }
+
+    public JokeCloudTask(Context context) {
+        mContext = context;
+    }
 
     /**
      * Interface definition for a callback to be invoked when the task is completed.
@@ -64,6 +74,7 @@ public class JokeCloudTask extends AsyncTask<String, Void, String> {
             return mMyApi.joke().execute().getData();
         } catch (IOException e) {
             Log.v(LOG_TAG, "ERROR: " + e.getMessage());
+            mException  = e;
             return null;
         }
     }
@@ -72,8 +83,12 @@ public class JokeCloudTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        if (null != mOnPostExecute) {
+        if (mOnPostExecute != null) {
             mOnPostExecute.onPostExecute(s);
+        }
+
+        if (mException != null && mContext != null) {
+            Toast.makeText(mContext, R.string.gce_connection_error, Toast.LENGTH_SHORT).show();
         }
     }
 }
