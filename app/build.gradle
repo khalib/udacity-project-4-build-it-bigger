@@ -33,6 +33,44 @@ android {
     }
 }
 
+task runAppCheck {
+    dependsOn check
+}
+
+task runAppAppengineStart {
+    evaluationDependsOn ":jokecloud"
+    dependsOn ":jokecloud:appengineRun"
+    mustRunAfter runAppCheck
+
+    project(":jokecloud"){
+        appengine{
+            daemon true
+        }
+    }
+}
+
+task runAppConnectedCheck {
+    mustRunAfter runAppAppengineStart
+    dependsOn = [
+            connectedCheck,
+            runAppAppengineStart
+    ]
+}
+
+task runAppAppengineStop {
+    dependsOn ":jokecloud:appengineStop"
+    mustRunAfter runAppConnectedCheck
+}
+
+task runAppEndToEndTests {
+    dependsOn = [
+            runAppCheck,
+            runAppConnectedCheck,
+            runAppAppengineStart,
+            runAppAppengineStop,
+    ]
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // Added for AdMob
